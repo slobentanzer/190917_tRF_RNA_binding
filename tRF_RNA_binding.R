@@ -1,4 +1,4 @@
-setwd("~/Genomics/190917_tRF_RNA_binding")
+setwd("~/GitHub/190917_tRF_RNA_binding")
 rm(list = ls())
 
 library(DECIPHER)
