@@ -1,14 +1,11 @@
 setwd("~/GitHub/190917_tRF_RNA_binding")
 rm(list = ls())
 
-library(DECIPHER)
+options(stringsAsFactors = F)
+
 library(plyr)
 library(dplyr)
 library(ggplot2)
-library(ggrepel)
-library(vegan)
-library(ape)
-
 
 # RBP sequence motifs ####
 # https://doi.org/10.1016/j.molcel.2018.05.001
