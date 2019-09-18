@@ -76,7 +76,7 @@ for(i in 1:length(motif_7)) {
 
 #FIND MOTIFS IN TRF SEQUENCES####
 #EXAMPLE DATA####
-trf_dif_exprs <- readRDS(file = "working_data/differentially_expressed_tRFs.rds")
+trf_dif_exprs <- readRDS(file = "working_data/stroke_DE_tRFs.rds")
 #>5mer hits####
 #>>preferred motifs####
 pref_motif_5_hits <- lapply(pref_motif_5_df$motif_5, function(x) grep(x, trf_dif_exprs$sequence))
@@ -85,7 +85,7 @@ pref_motif_5_hits <- lapply(pref_motif_5_hits, function(x) trf_dif_exprs[x,])
 pref_motif_5_hits <- pref_motif_5_hits[lapply(pref_motif_5_hits, function(x) length(x[[1]])) > 0]
 
 pref_motif_5_hits_df <- ldply(pref_motif_5_hits)
-pref_motif_5_hits_df$condition <- factor(pref_motif_5_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
+# pref_motif_5_hits_df$condition <- factor(pref_motif_5_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
 pref_motif_5_hits_df$countChange <- get.count.change(pref_motif_5_hits_df$baseMean, pref_motif_5_hits_df$log2FoldChange)
 
 ggplot(pref_motif_5_hits_df, aes(.id, asinh(countChange), fill = condition, color = condition)) + geom_boxplot() +
@@ -97,9 +97,9 @@ pref_motif_5_hits_df$CC_rank <- rank(-abs(pref_motif_5_hits_df$countChange))
 pref_motif_5_hits_df <- pref_motif_5_hits_df[order(pref_motif_5_hits_df$CC_rank),]
 #>>>most "active"####
 #RNABPs
-dplyr::count(unique(pref_motif_5_hits_df[,c(".id", "plate")]), .id, sort = T)
+dplyr::count(unique(pref_motif_5_hits_df[,c(".id", "MINTplate")]), .id, sort = T)
 #tRFs
-dplyr::count(unique(pref_motif_5_hits_df[,c(".id", "plate")]), plate, sort = T)
+dplyr::count(unique(pref_motif_5_hits_df[,c(".id", "MINTplate")]), MINTplate, sort = T)
 
 #single conditions
 for(condition in unique(pref_motif_5_hits_df$condition)) {
@@ -137,7 +137,7 @@ names(motif_5_hits) <- names(motif_5)
 motif_5_hits <- motif_5_hits[lapply(motif_5_hits, function(x) nrow(x)) > 0]
 
 motif_5_hits_df <- ldply(motif_5_hits)
-motif_5_hits_df$condition <- factor(motif_5_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
+# motif_5_hits_df$condition <- factor(motif_5_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
 motif_5_hits_df$`R-1` <- as.numeric(motif_5_hits_df$`R-1`)
 hist(motif_5_hits_df$`R-1`)
 
@@ -178,7 +178,7 @@ for(condition in unique(motif_5_hits_df$condition)) {
   means <- means[order(means$x), ]
   df$.id <-
     factor(df$.id, levels = means$Group.1)
-  g <- ggplot(df, aes(.id, countChange, fill = plate, color = plate, size = `R-1`)) + 
+  g <- ggplot(df, aes(.id, countChange, fill = MINTplate, color = MINTplate, size = `R-1`)) + 
     geom_point(position = position_jitter(width = .2, height = 0), alpha = .5) +
     facet_wrap("condition") +
     theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "none")
@@ -194,7 +194,7 @@ pref_motif_6_hits <- lapply(pref_motif_6_hits, function(x) trf_dif_exprs[x,])
 pref_motif_6_hits <- pref_motif_6_hits[lapply(pref_motif_6_hits, function(x) length(x[[1]])) > 0]
 
 pref_motif_6_hits_df <- ldply(pref_motif_6_hits)
-pref_motif_6_hits_df$condition <- factor(pref_motif_6_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
+# pref_motif_6_hits_df$condition <- factor(pref_motif_6_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
 pref_motif_6_hits_df$countChange <- get.count.change(pref_motif_6_hits_df$baseMean, pref_motif_6_hits_df$log2FoldChange)
 
 ggplot(pref_motif_6_hits_df, aes(.id, countChange, fill = condition, color = condition)) + geom_boxplot() +
@@ -203,8 +203,8 @@ ggplot(pref_motif_6_hits_df, aes(.id, countChange, fill = condition, color = con
 pref_motif_6_hits_df$CC_rank <- rank(-abs(pref_motif_6_hits_df$countChange))
 
 pref_motif_6_hits_df <- pref_motif_6_hits_df[order(pref_motif_6_hits_df$CC_rank),]
-dplyr::count(unique(pref_motif_6_hits_df[,c(".id", "plate")]), .id, sort = T)
-dplyr::count(unique(pref_motif_6_hits_df[,c(".id", "plate")]), plate, sort = T)
+dplyr::count(unique(pref_motif_6_hits_df[,c(".id", "MINTplate")]), .id, sort = T)
+dplyr::count(unique(pref_motif_6_hits_df[,c(".id", "MINTplate")]), MINTplate, sort = T)
 
 #>>all motifs####
 motif_6_hits <- vector(mode = "list", length = RBPS_len_6)
@@ -223,7 +223,7 @@ names(motif_6_hits) <- names(motif_6)
 motif_6_hits <- motif_6_hits[lapply(motif_6_hits, function(x) nrow(x)) > 0]
 
 motif_6_hits_df <- ldply(motif_6_hits)
-motif_6_hits_df$condition <- factor(motif_6_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
+# motif_6_hits_df$condition <- factor(motif_6_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
 motif_6_hits_df$`R-1` <- as.numeric(motif_6_hits_df$`R-1`)
 hist(motif_6_hits_df$`R-1`)
 
@@ -261,7 +261,7 @@ for(condition in unique(motif_6_hits_df$condition)) {
   means <- means[order(means$x), ]
   df$.id <-
     factor(df$.id, levels = means$Group.1)
-  g <- ggplot(df, aes(.id, countChange, fill = plate, color = plate, size = `R-1`)) + 
+  g <- ggplot(df, aes(.id, countChange, fill = MINTplate, color = MINTplate, size = `R-1`)) + 
     geom_point(position = position_jitter(width = .2, height = 0), alpha = .5) +
     facet_wrap("condition") +
     theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "none")
@@ -278,7 +278,7 @@ pref_motif_7_hits <- lapply(pref_motif_7_hits, function(x) trf_dif_exprs[x,])
 pref_motif_7_hits <- pref_motif_7_hits[lapply(pref_motif_7_hits, function(x) length(x[[1]])) > 0]
 
 pref_motif_7_hits_df <- ldply(pref_motif_7_hits)
-pref_motif_7_hits_df$condition <- factor(pref_motif_7_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
+# pref_motif_7_hits_df$condition <- factor(pref_motif_7_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
 pref_motif_7_hits_df$countChange <- get.count.change(pref_motif_7_hits_df$baseMean, pref_motif_7_hits_df$log2FoldChange)
 
 ggplot(pref_motif_7_hits_df, aes(.id, countChange, fill = condition, color = condition)) + geom_boxplot() +
@@ -287,8 +287,8 @@ ggplot(pref_motif_7_hits_df, aes(.id, countChange, fill = condition, color = con
 pref_motif_7_hits_df$CC_rank <- rank(-abs(pref_motif_7_hits_df$countChange))
 
 pref_motif_7_hits_df <- pref_motif_7_hits_df[order(pref_motif_7_hits_df$CC_rank),]
-dplyr::count(unique(pref_motif_7_hits_df[,c(".id", "plate")]), .id, sort = T)
-dplyr::count(unique(pref_motif_7_hits_df[,c(".id", "plate")]), plate, sort = T)
+dplyr::count(unique(pref_motif_7_hits_df[,c(".id", "MINTplate")]), .id, sort = T)
+dplyr::count(unique(pref_motif_7_hits_df[,c(".id", "MINTplate")]), MINTplate, sort = T)
 
 #>>all motifs####
 motif_7_hits <- vector(mode = "list", length = RBPS_len_7)
@@ -307,7 +307,7 @@ names(motif_7_hits) <- names(motif_7)
 motif_7_hits <- motif_7_hits[lapply(motif_7_hits, function(x) nrow(x)) > 0]
 
 motif_7_hits_df <- ldply(motif_7_hits)
-motif_7_hits_df$condition <- factor(motif_7_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
+# motif_7_hits_df$condition <- factor(motif_7_hits_df$condition, levels = c("30min", "60min", "2days", "4days"))
 motif_7_hits_df$`R-1` <- as.numeric(motif_7_hits_df$`R-1`)
 hist(motif_7_hits_df$`R-1`)
 
@@ -345,7 +345,7 @@ for(condition in unique(motif_7_hits_df$condition)) {
   means <- means[order(means$x), ]
   df$.id <-
     factor(df$.id, levels = means$Group.1)
-  g <- ggplot(df, aes(.id, countChange, fill = plate, color = plate, size = `R-1`)) + 
+  g <- ggplot(df, aes(.id, countChange, fill = MINTplate, color = MINTplate, size = `R-1`)) + 
     geom_point(position = position_jitter(width = .2, height = 0), alpha = .5) +
     facet_wrap("condition") +
     theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "none")
@@ -356,7 +356,7 @@ for(condition in unique(motif_7_hits_df$condition)) {
 #PLOT####
 #function####
 plot.rbp <- function(df, title = NULL, asin = F) {
-  df$MINTplate <- as.factor(df$plate)
+  df$MINTMINTplate <- as.factor(df$MINTplate)
   df$.id <- as.character(df$.id)
   means <-
     aggregate(df$countChange,
@@ -370,8 +370,8 @@ plot.rbp <- function(df, title = NULL, asin = F) {
                 aes(
                   .id,
                   asinh(countChange),
-                  fill = MINTplate,
-                  color = MINTplate,
+                  fill = MINTMINTplate,
+                  color = MINTMINTplate,
                   size = `R-1`
                 )) +
       geom_point(position = position_jitter(width = .2, height = 0), alpha = .5) +
@@ -383,8 +383,8 @@ plot.rbp <- function(df, title = NULL, asin = F) {
                 aes(
                   .id,
                   countChange,
-                  fill = MINTplate,
-                  color = MINTplate,
+                  fill = MINTMINTplate,
+                  color = MINTMINTplate,
                   size = `R-1`
                 )) +
       geom_point(position = position_jitter(width = .2, height = 0), alpha = .5) +
